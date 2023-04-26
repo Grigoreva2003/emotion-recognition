@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="wrap">
+        <div class="line-left">{{ description }}</div>
+        <div class="line-right">{{ info }}</div>
+    </div>
+    <img src="{{background_img}}" style="max-width: 100%; object-fit: scale-down;">
+</div>
+
+<div class="emotion-types">
+    <div class="container">
+        <h2>{{ header1 }}</h2>
+        <div class="text-container">
+            <p>{{ header1_description }}</p>
+        </div>
+    </div>
+    <div class="wrap">
+        <div class="img-container img-class1"> {{ happy }}</div>
+        <div class="img-container img-class2">{{ sad }}</div>
+        <div class="img-container img-class3">{{ surprise }}</div>
+        <div class="img-container img-class4">{{ fear }}</div>
+        <div class="img-container img-class5">{{ disgust }}</div>
+        <div class="img-container img-class6">{{ anger }}</div>
+        <div class="img-container img-class7">{{ neutral }}</div>
+    </div>
+</div>
+
+<div class="text-block" style="margin: 70px 0">
+    <div class="container">
+        <h2>{{ header2 }}</h2>
+        <div class="line-delimiter"></div>
+        <p>Входными данными являются растровые графические файлы расширения:
+            <br>– PNG
+            <br>– JPG
+            <br>Изображение подается на вход в единственном экземпляре
+            <br>Размер изображения не должен превышать 5 Мб
+            <br>Длина и ширина должны быть не менее 48 пикселей и не более 800 пикселей
+        </p>
+
+    </div>
+</div>
+
+<div class="text-block" style="padding: 100px 0; background: #ff7752">
+    <div class="container">
+        <h2 style="color: white">{{ sect2 }}</h2>
+        <p style="color: white">Попробуйте возможности искусственного интеллекта прямо сейчас</p>
+        <h1 style="justify-content: center; display: flex; margin-top: 30px; margin-bottom: 30px;">
+            <i class="bi bi-arrow-down"></i>
+        </h1>
+        <div class="button">
+            <a href="/upload" style="font-weight: 700">{{ sect2 }}</a>
+        </div>
+    </div>
+</div>
+
+<div class="text-block" style="margin: 60px 0">
+    <div class="container">
+        <h2>{{ header3 }}</h2>
+
+        <div class="wrap">
+            <li>
+                <div class="icon"
+                     data-original="https://static.tildacdn.info/lib/tildaicon/31303435-6334-4334-b033-363535616366/Tilda_Icons_39_IT_target.svg"
+                     bgimgfield="img"
+                     style="background-image: url('https://static.tildacdn.info/lib/tildaicon/31303435-6334-4334-b033-363535616366/Tilda_Icons_39_IT_target.svg');"
+                     itemscope="" itemtype="http://schema.org/ImageObject">
+                    <meta itemprop="image"
+                          content="https://static.tildacdn.info/lib/tildaicon/31303435-6334-4334-b033-363535616366/Tilda_Icons_39_IT_target.svg">
+                </div>
+                <p style="margin-left: -50px">{{ advantage1 }}</p>
+            </li>
+
+            <li>
+                <div class="icon"
+                     data-original="https://static.tildacdn.info/lib/tildaicon/31366535-3839-4565-a239-376262383234/yoga_philosophy.svg"
+                     bgimgfield="img2"
+                     style="background-image: url('https://static.tildacdn.info/lib/tildaicon/31366535-3839-4565-a239-376262383234/yoga_philosophy.svg');"
+                     itemscope="" itemtype="http://schema.org/ImageObject">
+                    <meta itemprop="image"
+                          content="https://static.tildacdn.info/lib/tildaicon/31366535-3839-4565-a239-376262383234/yoga_philosophy.svg">
+                </div>
+                <p>{{ advantage2 }}</p>
+            </li>
+        </div>
+    </div>
+</div>
+{% endblock %}

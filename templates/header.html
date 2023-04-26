@@ -1,0 +1,17 @@
+{% block header %} <!-- Header -->
+<header id="header">
+    <div class="container">
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link active" href="/">{{ sect1 }}</a></li>
+                <li><a class="nav-link" href="/upload">{{ sect2 }}</a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- Navigation -->
+
+        <h1>{{ project_name }}</h1>
+        <h3>{{ tagline }}</h3>
+    </div>
+</header>
+{% endblock %} <!-- Header's end -->

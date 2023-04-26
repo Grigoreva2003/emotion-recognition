@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="wrap" style="margin-top: 60px">
+        <form method="post" enctype="multipart/form-data">
+            <label class="input-file">
+                <input type="file" name="photo" accept="image/png,image/jpeg" onchange="changeFilename(this)">
+                <span id="label">Загрузить изображение</span>
+            </label>
+            <input type="submit" value="Отправить">
+        </form>
+
+    </div>
+
+    {% if filename != '' %}
+    <div class="input-img">
+        <img src="{{ filename }}">
+        <h2 class="input-img-text">Description</h2>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
