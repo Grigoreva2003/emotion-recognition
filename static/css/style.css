@@ -212,7 +212,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #footer .info {
-    margin-top: 50px ;
+    margin-top: 50px;
     font-size: 15px;
 }
 
@@ -323,7 +323,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 30px;
 }
 
-.text-container p{
+.text-container p {
     color: white;
 }
 
@@ -435,15 +435,163 @@ div .line-right {
     width: 50%;
     height: 50%;
     margin: 20px 20px 20px -80px;
-    /*display: inline-flex;*/
     object-fit: contain;
 }
 
 .input-img-text {
+    font-size: 18px;
     color: black;
-    align-content: center;
+    text-align: center;
     display: grid;
-    padding: 0 20%;
+    padding: 15% 10%;
+}
+
+/*--------------------------------------------------------------
+# Diagram
+--------------------------------------------------------------*/
+.pie {
+    --pie-color-1: hsl(0, 100%, 70%); /* цвет сектора */
+    --pie-color-2: hsl(60, 100%, 70%);
+    --pie-color-3: hsl(150, 100%, 70%);
+    --pie-color-4: hsl(210, 100%, 70%);
+    --pie-color-5: hsl(270, 100%, 70%);
+    --pie-color-6: hsl(320, 100%, 70%);
+    --pie-color-7: hsl(190, 100%, 40%);
+    display: grid;
+    padding-left: 15%;
+    grid-template-columns: 14em 12em; /* 12em — размер диаграммы, 10em — размер легенды */
+    gap: 0 4em; /* 3em - 2em (margin-left) = 1em — расстояние от диаграммы до легенды */
+    overflow: auto;
+}
+
+.pie div {
+    color: black;
+    grid-column: 2 / 3;
+    align-self: center;
+}
+
+.pie svg {
+    grid-column: 1 / 2;
+    grid-row: 1 / 8;
+}
+
+.pie div::before {
+    content: "";
+    width: 1.5em;
+    height: 1.5em;
+    display: inline-block;
+    margin-left: -2em; /* 1.5em (width) + .5em (margin-right) = 2em */
+    margin-right: .5em;
+    vertical-align: middle;
+}
+
+.pie div:nth-of-type(1):before {
+    background: var(--pie-color-1);
+}
+
+.pie div:nth-of-type(2):before {
+    background: var(--pie-color-2);
+}
+
+.pie div:nth-of-type(3):before {
+    background: var(--pie-color-3);
+}
+
+.pie div:nth-of-type(4):before {
+    background: var(--pie-color-4);
+}
+
+.pie div:nth-of-type(5):before {
+    background: var(--pie-color-5);
+}
+
+.pie div:nth-of-type(6):before {
+    background: var(--pie-color-6);
+}
+
+.pie div:nth-of-type(7):before {
+    background: var(--pie-color-7);
+}
+
+.pie text {
+    text-anchor: middle;
+    dominant-baseline: central;
+    font-size: 5px;
+    visibility: hidden;
+}
+
+.pie circle {
+    fill: none;
+    stroke-width: 8;
+    cursor: pointer;
+    transition: all 1.5s;
+}
+
+.pie circle:nth-of-type(1) {
+    stroke: var(--pie-color-1);
+    stroke-dasharray: 18 100;
+}
+
+.pie circle:nth-of-type(2) {
+    stroke: var(--pie-color-2);
+    stroke-dasharray: 0 18 12 100;
+}
+
+.pie circle:nth-of-type(3) {
+    stroke: var(--pie-color-3);
+    stroke-dasharray: 0 30 9 100;
+}
+
+.pie circle:nth-of-type(4) {
+    stroke: var(--pie-color-4);
+    stroke-dasharray: 0 39 16 100;
+}
+
+.pie circle:nth-of-type(5) {
+    stroke: var(--pie-color-5);
+    stroke-dasharray: 0 55 10 100;
+}
+
+.pie circle:nth-of-type(6) {
+    stroke: var(--pie-color-6);
+    stroke-dasharray: 0 65 10 100; /* до последнего сектора отступ 25%+3%+10%+40%=78%, последний сектор составляет оставшиеся до 100% */
+}
+
+.pie circle:nth-of-type(7) {
+    stroke: var(--pie-color-7);
+    stroke-dasharray: 0 75 100; /* до последнего сектора отступ 25%+3%+10%+40%=78%, последний сектор составляет оставшиеся до 100% */
+}
+
+.pie g:hover circle:not(:hover) { /* сектора, кроме активного */
+    opacity: .3; /* сделать полупрозрачным */
+}
+
+.pie div:nth-of-type(1):hover ~ svg circle:not(:nth-of-type(1)),
+.pie div:nth-of-type(2):hover ~ svg circle:not(:nth-of-type(2)),
+.pie div:nth-of-type(3):hover ~ svg circle:not(:nth-of-type(3)),
+.pie div:nth-of-type(4):hover ~ svg circle:not(:nth-of-type(4)),
+.pie div:nth-of-type(5):hover ~ svg circle:not(:nth-of-type(5)),
+.pie div:nth-of-type(6):hover ~ svg circle:not(:nth-of-type(6)),
+.pie div:nth-of-type(7):hover ~ svg circle:not(:nth-of-type(7)),
+.pie g:hover circle:not(:hover) {
+    opacity: .3;
+}
+
+.pie div:nth-of-type(1):hover ~ svg text:nth-of-type(1),
+.pie div:nth-of-type(2):hover ~ svg text:nth-of-type(2),
+.pie div:nth-of-type(3):hover ~ svg text:nth-of-type(3),
+.pie div:nth-of-type(4):hover ~ svg text:nth-of-type(4),
+.pie div:nth-of-type(5):hover ~ svg text:nth-of-type(5),
+.pie div:nth-of-type(6):hover ~ svg text:nth-of-type(6),
+.pie div:nth-of-type(7):hover ~ svg text:nth-of-type(7),
+.pie circle:nth-of-type(1):hover ~ text:nth-of-type(1),
+.pie circle:nth-of-type(2):hover ~ text:nth-of-type(2),
+.pie circle:nth-of-type(3):hover ~ text:nth-of-type(3),
+.pie circle:nth-of-type(4):hover ~ text:nth-of-type(4),
+.pie circle:nth-of-type(5):hover ~ text:nth-of-type(5),
+.pie circle:nth-of-type(6):hover ~ text:nth-of-type(6),
+.pie circle:nth-of-type(7):hover ~ text:nth-of-type(7) {
+    visibility: visible;
 }
 
 
@@ -587,74 +735,76 @@ div .line-right {
 input[type=submit] {
     margin: 0 40px;
     padding: 10px 20px;
-	border-radius: 30px;
-    background: rgba(0,123,255,.25);
-	border-width: 2px;
+    border-radius: 30px;
+    background: rgba(0, 123, 255, .25);
+    border-width: 2px;
     border-color: #25598a;
-	cursor: pointer;
-	font-size: 17px;
+    cursor: pointer;
+    font-size: 17px;
     font-weight: 500;
     transition: background-color 0.3s;
 }
 
 input[type=submit]:hover {
-    background-color: rgba(0,123,255,.5);
+    background-color: rgba(0, 123, 255, .5);
 }
 
 .input-file {
     margin: 60px auto;
-	position: relative;
-	display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 .input-file span {
-	position: relative;
-	display: inline-block;
-	cursor: pointer;
-	outline: none;
-	text-decoration: none;
-	font-size: 17px;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    text-decoration: none;
+    font-size: 17px;
     font-weight: 500;
-	vertical-align: middle;
-	color: rgb(255 255 255);
-	text-align: center;
-	border-radius: 25px;
-	background-color: #25598a;
-	line-height: 2px;
-	height: 40px;
-	padding: 40px 70px;
-	box-sizing: border-box;
-	border: none;
-	margin: 0;
-	transition: all ease-in-out 0.3s;
+    vertical-align: middle;
+    color: rgb(255 255 255);
+    text-align: center;
+    border-radius: 25px;
+    background-color: #25598a;
+    line-height: 2px;
+    height: 40px;
+    padding: 40px 70px;
+    box-sizing: border-box;
+    border: none;
+    margin: 0;
+    transition: all ease-in-out 0.3s;
 }
 
 .input-file input[type=file] {
-	position: absolute;
-	z-index: -1;
-	opacity: 0;
-	display: block;
-	width: 0;
-	height: 0;
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    display: block;
+    width: 0;
+    height: 0;
 }
 
 /* Focus */
 .input-file input[type=file]:focus + span {
-	box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
 }
 
 /* Hover/active */
 .input-file:hover span {
-	transform: scale(1.1);
+    transform: scale(1.1);
 }
+
 .input-file:active span {
-	background-color: #25598a;
+    background-color: #25598a;
 }
 
 /* Disabled */
 .input-file input[type=file]:disabled + span {
-	background-color: #eee;
+    background-color: #eee;
 }
+
 /*!* --------------------------------------------------------------*/
 /*# Sections General*/
 /*--------------------------------------------------------------*!*/
