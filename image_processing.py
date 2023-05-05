@@ -18,7 +18,8 @@ text_color = (255, 255, 255)
 thickness = 2
 
 
-def f1_score(y_true, y_pred):  # taken from old keras source code
+# метрика оценки качества модели
+def f1_score(y_true, y_pred):
     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
     possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
     predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
@@ -45,52 +46,81 @@ def draw_info(img, x, y, w, h, emotion_text):
                 cv2.LINE_AA)
 
 
+# очищение директори path от всех файлов расширения .jpg
+def clean_folder(path):
+    filelist = [f for f in os.listdir(path) if f.lower().endswith(".jpg")]
+    for file in filelist:
+        os.remove(os.path.join(path, file))
+
+
+# получение эмоции на фотографии
+def get_emotion():
+    # extracting image for processing from the folder and predicting emotions
+    test_dataset = test_datagen.flow_from_directory(directory='static/img/IO_img',
+                                                    target_size=(48, 48),
+                                                    class_mode='categorical',
+                                                    batch_size=64,
+                                                    shuffle=False)
+    return fer_model.predict(test_dataset)[0]
+
+
+# получение пола на фотографии
+def get_gender():
+    test_dataset = test_datagen.flow_from_directory(directory='static/img/IO_img',
+                                                    target_size=(48, 48),
+                                                    class_mode='binary',
+                                                    batch_size=64,
+                                                    shuffle=False)
+    return gender_model.predict(test_dataset)[0][0]
+
+
 def process_image(path_to_dir, filename):
     face_cascade = cv2.CascadeClassifier(
         'C:\Program Files (x86)\Python38-32\Lib\site-packages\cv2\data\haarcascade_frontalface_default.xml')
 
     img = cv2.imread(os.path.join(path_to_dir, filename))
 
-    filelist = [f for f in os.listdir(path_to_dir) if f.endswith(".jpg")]
-    for file in filelist:
-        os.remove(os.path.join(path_to_dir, file))
-
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    emotion_percentage = {val: 0 for val in emotion_dict.values()}
+    gender_type = ''
     for (x, y, w, h) in faces:
         # resize cropped face from input image and convert it from GRAY to BGR
         resized_face = cv2.cvtColor(cv2.resize(crop_face(gray, x, y, w, h), (48, 48)), cv2.COLOR_GRAY2BGR)
         # saving image to "static/img/IO_img/prediction_img" folder
-        cv2.imwrite(os.path.join(path_to_dir + '\prediction_img', 'test.jpg'), resized_face)
+        cv2.imwrite(os.path.join(path_to_dir + '\prediction_img', 'cropped_face.jpg'), resized_face)
 
-        # extracting image for processing from the folder and predicting emotions
-        test_dataset = test_datagen.flow_from_directory(directory='static/img/IO_img',
-                                                        target_size=(48, 48),
-                                                        class_mode='categorical',
-                                                        batch_size=64,
-                                                        shuffle=False)
-        prediction = model.predict(test_dataset)[0]
-        emotion_type = emotion_dict[np.argmax(prediction)]
+        emotion_prediction = get_emotion()
+        gender_prediction = get_gender()
+
+        gender_type = gender_dict[gender_prediction > 0.5]
+        emotion_type = emotion_dict[np.argmax(emotion_prediction)]
+
+        # заполняем словарь распределения эмоций для отображения на круговой диаграмме
+        for (i, name) in zip(range(7), emotion_dict.values()):
+            emotion_percentage[name] += emotion_prediction[i]
 
         draw_info(img, x, y, w, h, emotion_type)
 
+    emotion_percentage = [round(emotion_percentage[key] * 100 / len(faces)) for key in emotion_percentage.keys()]
+    emotion_percentage[-1] = 100 - sum(emotion_percentage[:-1])
+    if len(faces) > 1:
+        gender_type = 'для предсказания необходимо наличие единственного лица на изображении'
+
+    clean_folder(path_to_dir)
+
     output_filename = 'output_' + filename
     cv2.imwrite(os.path.join(path_to_dir, output_filename), img)
-    return output_filename
+    return output_filename, emotion_percentage, gender_type
 
 
 emotion_dict = {0: 'angry', 1: 'disgust', 2: 'fear', 3: 'happy', 4: 'neutral', 5: 'sad', 6: 'surprise'}
+gender_dict = {0: 'женщина', 1: 'мужчина'}
 
-model = keras.models.load_model('fer_model_tf.h5',
-                                custom_objects={'f1_score': f1_score},
-                                compile=False)
+fer_model = keras.models.load_model('fer_model_tf.h5',
+                                    custom_objects={'f1_score': f1_score},
+                                    compile=False)
+gender_model = keras.models.load_model('gender_model_tf.h5',
+                                       compile=False)
 
 test_datagen = ImageDataGenerator(rescale=1. / 255)
-# test_dataset = test_datagen.flow_from_directory(directory='static/img',
-#                                                 target_size=(48, 48),
-#                                                 class_mode='categorical',
-#                                                 batch_size=64,
-#                                                 shuffle=False)
-# res = model.predict(test_dataset)
-# for ans in res:
-#     print('Answer for the 0 photo:', emotion_dict[np.argmax(ans)])

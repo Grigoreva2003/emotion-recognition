@@ -68,15 +68,23 @@ def uploaded_file(filename):
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         return redirect(url_for('uploaded_file', filename=filename))
 
-    filename = 'http://127.0.0.1:8000/uploads/' + filename
-    return render_template('loading_form.html', filename=filename, **settings)
+    output_file, percentage_list, gender = process_image(UPLOAD_FOLDER, filename)
+    filename = 'http://127.0.0.1:8000/uploads/' + output_file
+
+    return render_template('loading_form.html', filename=filename, percentage=percentage_list, gender=gender,
+                           **settings)
 
 
 # utility method for loading image in html
 @app.route('/uploads/<filename>')
 def send_file(filename):
-    output_file = process_image(UPLOAD_FOLDER, filename)
-    return send_from_directory(UPLOAD_FOLDER, output_file)
+    return send_from_directory(UPLOAD_FOLDER, filename)
+
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    # handdling all Errors
+    return render_template("500_generic.html", e=e, **settings), 500
 
 
 if __name__ == "__main__":

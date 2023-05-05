@@ -49,17 +49,17 @@
 
 "header1_description":"Нейросеть способа различать 7 видов эмоций и определять биологический пол человека",
 
-"happy":"Радость",
+"happy":"Happy",
 
-"sad":"Грусть",
+"sad":"Sad",
 
-"surprise":"Удивление",
+"surprise":"Surprise",
 
-"fear":"Страх",
+"fear":"Fear",
 
-"disgust":"Отвращение",
+"disgust":"Disgust",
 
-"anger":"Гнев",
+"anger":"Anger",
 
-"neutral":"Нейтральность"
+"neutral":"Neutral"
 }
