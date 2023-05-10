@@ -46,7 +46,7 @@ def draw_info(img, x, y, w, h, emotion_text):
                 cv2.LINE_AA)
 
 
-# очищение директори path от всех файлов расширения .jpg
+# очищение директорию path от всех файлов расширения .jpg
 def clean_folder(path):
     filelist = [f for f in os.listdir(path) if f.lower().endswith(".jpg")]
     for file in filelist:
@@ -102,8 +102,9 @@ def process_image(path_to_dir, filename):
 
         draw_info(img, x, y, w, h, emotion_type)
 
-    emotion_percentage = [round(emotion_percentage[key] * 100 / len(faces)) for key in emotion_percentage.keys()]
-    emotion_percentage[-1] = 100 - sum(emotion_percentage[:-1])
+    if len(faces) > 0:
+        emotion_percentage = [round(emotion_percentage[key] * 100 / len(faces)) for key in emotion_percentage.keys()]
+        emotion_percentage[-1] = 100 - sum(emotion_percentage[:-1])
     if len(faces) > 1:
         gender_type = 'для предсказания необходимо наличие единственного лица на изображении'
 
