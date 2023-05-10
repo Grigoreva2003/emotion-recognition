@@ -1,33 +1,22 @@
 import sys, json, os
 
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory
-from flask_flatpages import FlatPages, pygments_style_defs
+from flask_flatpages import FlatPages
 from flask_frozen import Freezer
 from werkzeug.utils import secure_filename
-from django.utils.cache import add_never_cache_headers
 
 from image_processing import process_image
-
-
-class NoCachingMiddleware(object):
-    def process_response(self, request, response):
-        add_never_cache_headers(response)
-        return response
-
 
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
 FLATPAGES_EXTENSION = '.md'
 FLATPAGES_ROOT = 'content'
 POST_DIR = 'posts'
-
 UPLOAD_FOLDER = 'static\img\IO_img'
-ALLOWED_EXTENSIONS = {'png', 'jpg'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-app = Flask(__name__)
 flatpages = FlatPages(app)
 freezer = Freezer(app)
 app.config.from_object(__name__)
@@ -38,7 +27,7 @@ with open('settings.txt', encoding='utf8') as config:
 
 
 # home page of the site
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def start():
     return render_template('index.html', **settings)
 
@@ -81,12 +70,17 @@ def send_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # handdling all Errors
+    return render_template("500_generic.html", e=e, **settings), 404
+
 @app.errorhandler(Exception)
 def handle_exception(e):
     # handdling all Errors
-    return render_template("500_generic.html", e=e, **settings), 500
+    return render_template("500_generic.html", e="Проблемы с загрузкой графического файла", **settings), 500
 
-
+# server launch
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "build":
         freezer.freeze()
